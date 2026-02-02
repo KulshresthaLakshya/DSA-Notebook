@@ -20,7 +20,6 @@ Output:
 10 30 40 50
 
 Explanation: Delete position 2 (element 20), remaining elements shift left */
-
 #include <stdio.h>
 int main()
 {
