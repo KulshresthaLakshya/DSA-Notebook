@@ -19,7 +19,7 @@ int main()
     {
         for(int j=0; j<M; j++)
         {
-            printf("Provide the element for (i,j)=%d,%d: ", i,j);
+            printf("Provide the element for (%d,%d): ", i,j);
             scanf("%d", &a[i][j]);
         }
     }
