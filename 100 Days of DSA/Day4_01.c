@@ -15,6 +15,9 @@ Output:
 
 Explanation: Swap pairs from both ends: (1,5), (2,4), middle 3 stays
 */
+
+/*
+//USING REVERSE LOOP
 #include <stdio.h>
 int main()
 {
@@ -26,8 +29,8 @@ int main()
   printf("Fill in your Array\n");
   for(int i=0; i<N; i++)
   {
-     printf("Position %d: \n", i+1);
-     scanf("%d", &a[i]);
+    printf("Position %d: \n", i+1);
+    scanf("%d", &a[i]);
   }
 
   printf("Reverse Array is\n");
@@ -36,4 +39,40 @@ int main()
     printf("%d ", a[i]);
   }
   return 0;
+}
+*/
+
+
+//USING SWAP
+#include <stdio.h>
+int main()
+{
+  int N;
+  printf("Make an input for size of Array:\n");
+  scanf("%d", &N);
+
+  int a[N];
+  printf("Fill in your Array\n");
+  for(int i=0; i<N; i++)
+  {
+    scanf("%d", &a[i]);
+  }
+
+    int left = 0;
+    int right = N - 1;
+    while (left < right) 
+    {
+        int temp= a[left];
+        a[left]= a[right];
+        a[right]= temp;
+        left++;
+        right--;
+    }
+
+    printf("Reversed Array\n");
+    for (int i=0; i<N; i++)
+    {
+        printf("%d ", a[i]);
+    }
+return 0;
 }
