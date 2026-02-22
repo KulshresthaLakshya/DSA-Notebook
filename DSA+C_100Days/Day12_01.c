@@ -1,33 +1,43 @@
 #include <stdio.h>
 
 int main() {
-    int rows, cols;
+    int m, n;
 
-    if (scanf("%d %d", &rows, &cols) != 2) return 0;
+    // Input dimensions
+    if (scanf("%d %d", &m, &n) != 2) return 0;
 
-    int a[rows][cols], b[rows][cols], sum[rows][cols];
+    int matrix[m][n];
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            scanf("%d", &a[i][j]);
+    // Input matrix elements
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &matrix[i][j]);
         }
     }
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            scanf("%d", &b[i][j]);
-        }
+    // Step 1: Check if it is a square matrix
+    if (m != n) {
+        printf("Not a Symmetric Matrix\n");
+        return 0;
     }
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            sum[i][j] = a[i][j] + b[i][j];
-            printf("%d", sum[i][j]);
-            if (j < cols - 1) {
-                printf(" ");
+    // Step 2: Check if element[i][j] == element[j][i]
+    int isSymmetric = 1; // Assume true initially
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (matrix[i][j] != matrix[j][i]) {
+                isSymmetric = 0; // Found a mismatch
+                break;
             }
         }
-        printf("\n");
+        if (!isSymmetric) break;
+    }
+
+    // Output result
+    if (isSymmetric) {
+        printf("Symmetric Matrix\n");
+    } else {
+        printf("Not a Symmetric Matrix\n");
     }
 
     return 0;
