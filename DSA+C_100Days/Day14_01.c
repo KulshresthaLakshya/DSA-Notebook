@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+int main() {
+    int n;
+    
+    // Read the size of the square matrix
+    if (scanf("%d", &n) != 1) return 0;
+
+    int matrix[n][n];
+    bool isIdentity = true;
+
+    // Input the matrix and check conditions simultaneously
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &matrix[i][j]);
+
+            // Check if diagonal elements are 1
+            if (i == j) {
+                if (matrix[i][j] != 1) {
+                    isIdentity = false;
+                }
+            } 
+            // Check if non-diagonal elements are 0
+            else {
+                if (matrix[i][j] != 0) {
+                    isIdentity = false;
+                }
+            }
+        }
+    }
+
+    if (isIdentity) {
+        printf("Identity Matrix\n");
+    } else {
+        printf("Not an Identity Matrix\n");
+    }
+
+    return 0;
+}
