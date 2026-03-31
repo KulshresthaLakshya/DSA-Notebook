@@ -1,129 +1,116 @@
 // Implement Binary Trees& the transversals
 // Insert, traverse and delete(Leaf node in case of BT)
-
 #include <stdio.h>
 #include <stdlib.h>
 
 struct Node {
     int data;
-    struct Node* left;
-    struct Node* right;
+    struct Node *left, *right;
 };
 
 struct Node* createNode(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
-    newNode->left = NULL;
-    newNode->right = NULL;
+    newNode->left = newNode->right = NULL;
     return newNode;
 }
 
-//Traversals
-void preOrder(struct Node* root) {
-    if (root != NULL) {
-        printf("%d ", root->data);
-        preOrder(root->left);
-        preOrder(root->right);
+// --- Level Order Insertion using a Simple Queue ---
+void insertBT(struct Node** root, int data) {
+    struct Node* newNode = createNode(data);
+    if (*root == NULL) {
+        *root = newNode;
+        return;
+    }
+
+    // Temporary queue for level order traversal
+    struct Node* queue[100]; 
+    int front = 0, rear = 0;
+    queue[rear++] = *root;
+
+    while (front < rear) {
+        struct Node* temp = queue[front++];
+
+        if (temp->left == NULL) {
+            temp->left = newNode;
+            return;
+        } else {
+            queue[rear++] = temp->left;
+        }
+
+        if (temp->right == NULL) {
+            temp->right = newNode;
+            return;
+        } else {
+            queue[rear++] = temp->right;
+        }
     }
 }
 
+// --- Delete Leaf Node ---
+struct Node* deleteLeaf(struct Node* root, int key) {
+    if (root == NULL) return NULL;
+
+    if (root->data == key && root->left == NULL && root->right == NULL) {
+        free(root);
+        return NULL;
+    }
+
+    root->left = deleteLeaf(root->left, key);
+    root->right = deleteLeaf(root->right, key);
+    return root;
+}
+
+// --- Traversals ---
 void inOrder(struct Node* root) {
-    if (root != NULL) {
+    if (root) {
         inOrder(root->left);
         printf("%d ", root->data);
         inOrder(root->right);
     }
 }
 
+void preOrder(struct Node* root) {
+    if (root) {
+        printf("%d ", root->data);
+        preOrder(root->left);
+        preOrder(root->right);
+    }
+}
+
 void postOrder(struct Node* root) {
-    if (root != NULL) {
+    if (root) {
         postOrder(root->left);
         postOrder(root->right);
         printf("%d ", root->data);
     }
 }
 
-//Insertion (BST Logic)
-struct Node* insert(struct Node* root, int data) {
-    if (root == NULL) {
-        return createNode(data);
-    }
-    if (data < root->data) {
-        root->left = insert(root->left, data);
-    } else if (data > root->data) {
-        root->right = insert(root->right, data);
-    }
-    return root;
-}
-
-//Delete Leaf Node
-struct Node* deleteLeaf(struct Node* root, int key) {
-    if (root == NULL) {
-        printf("Node not found.\n");
-        return NULL;
-    }
-
-    if (key < root->data) {
-        root->left = deleteLeaf(root->left, key);
-    } else if (key > root->data) {
-        root->right = deleteLeaf(root->right, key);
-    } else {
-        if (root->left == NULL && root->right == NULL) {
-            free(root);
-            printf("Leaf node deleted successfully.\n");
-            return NULL;
-        } else {
-            printf("Error: The node is not a leaf node!\n");
-        }
-    }
-    return root;
-}
-
 int main() {
     struct Node* root = NULL;
-    int choice, val, tChoice;
+    int choice, val;
 
-    do {
-        printf("\n--- Binary Tree Operations ---");
-        printf("\n1. Insert\n2. Delete Leaf\n3. Traverse\n0. Exit");
-        printf("\nChoice: ");
+    while (1) {
+        printf("\n--- Binary Tree Menu ---\n1. Insert\n2. Delete Leaf\n3. In-Order Traverse\n4. Pre-Order\n5. Post-Order\n0. Exit\nChoice: ");
         scanf("%d", &choice);
 
-        switch(choice) {
+        switch (choice) {
             case 1:
-                printf("Enter value to insert: ");
+                printf("Value: ");
                 scanf("%d", &val);
-                root = insert(root, val);
+                insertBT(&root, val);
                 break;
-                
             case 2:
-                printf("Enter leaf value to delete: ");
+                printf("Leaf Value to Delete: ");
                 scanf("%d", &val);
                 root = deleteLeaf(root, val);
                 break;
-
-            case 3:
-                if (root == NULL) {
-                    printf("Tree is empty.\n");
-                    break;
-                }
-                printf("\nChoose Traversal:\n1. Pre-order\n2. In-order\n3. Post-order\nChoice: ");
-                scanf("%d", &tChoice);
-                printf("Result: ");
-                if (tChoice == 1) preOrder(root);
-                else if (tChoice == 2) inOrder(root);
-                else if (tChoice == 3) postOrder(root);
-                printf("\n");
-                break;
-
-            case 0:
-                printf("Exiting...\n");
-                break;
-
-            default:
-                printf("Invalid choice!\n");
+            case 3: inOrder(root); printf("\n"); break;
+            case 4: preOrder(root); printf("\n"); break;
+            case 5: postOrder(root); printf("\n"); break;
+            case 0: exit(0);
+            default: printf("Invalid!\n");
         }
-    } while(choice != 0);
-
+    }
     return 0;
 }
